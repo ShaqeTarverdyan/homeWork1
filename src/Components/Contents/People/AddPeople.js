@@ -5,44 +5,70 @@ import * as actionCreator from '../../../StateManagement/Actions/actions';
 
 
 class AddPeople extends React.Component {
-    addNewPeopleToServer = (e) => {
+
+    state = {
+        name: '',
+        username: '',
+        email: '',
+        phone: '',
+        website: '',
+    };
+    handleInputChange = e => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    handleSubmit = e => {
         e.preventDefault();
-        this.props.addNewPeopleToServer()
+        console.log(this.state)
+        // if (this.state.name.trim()) {
+        //     this.props.addPeople(this.state);
+        //     this.handleReset();
+        // }
+    };
+    handleReset = () => {
+        this.setState({
+            name: '',
+            username: '',
+            email: '',
+            phone: '',
+            website: '',
+        })
     }
     render() {
 
         return (
-            <Segment onSubmit={this.addNewPeopleToServer}>
-                <Form>
+            <Segment >
+                <Form onSubmit={this.handleSubmit}>
                     <Input
                         name='name'
                         placeholder='Name'
-                        onChange={this.props.getInputValue}
-                        value={this.props.people.name}
+                        onChange={this.handleInputChange}
+                        value={this.state.name}
                     />
-                     <Input
+                    <Input
                         name='username'
                         placeholder='userName'
-                        onChange={this.props.getInputValue}
-                        value={this.props.people.username}
+                        onChange={this.handleInputChange}
+                        value={this.state.username}
                     />
-                   <Input
+                    <Input
                         name='email'
                         placeholder='Email'
-                        onChange={this.props.getInputValue}
-                        value={this.props.people.email}
+                        onChange={this.handleInputChange}
+                        value={this.state.email}
                     />
                     <Input
                         name='phone'
                         placeholder='Phone'
-                        onChange={this.props.getInputValue}
-                        value={this.props.people.phone}
+                        onChange={this.handleInputChange}
+                        value={this.state.phone}
                     />
                     <Input
                         name='website'
                         placeholder='Website'
-                        onChange={this.props.getInputValue}
-                        value={this.props.people.website}
+                        onChange={this.handleInputChange}
+                        value={this.state.website}
                     />
                     {/* <Input
                         name='company.name'
@@ -55,7 +81,9 @@ class AddPeople extends React.Component {
                         placeholder='Catch Phrase'
                         onChange={this.props.getInputValue}
                     /> */}
-                    <Button primary>Submit</Button>
+                    <Button primary >Submit</Button>
+                    <Button secondary onClick={this.handleReset}>Reset</Button>
+
                 </Form>
             </Segment>
         );
@@ -64,17 +92,14 @@ class AddPeople extends React.Component {
 }
 
 const mapStateToProps = state => {
+    console.log(state)
     return {
-        peoples:state.peoples,
-        people:state.people
-
+        peoples: state.peoples
     }
 }
 const mapDispatchToState = dispatch => {
     return {
-        getInputValue: (event) => dispatch(actionCreator.getInputValue(event)),
-        addNewPeopleToServer:() => dispatch(actionCreator.addNewPeopleToServer()),
-
+        onAddPeople: people => dispatch(actionCreator.AddPeople(people))
     }
 }
 export default connect(mapStateToProps, mapDispatchToState)(AddPeople);

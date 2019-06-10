@@ -1,8 +1,6 @@
 import React from 'react';
 import { Segment, Table } from 'semantic-ui-react';
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import { connect } from 'react-redux';
-import * as actionCreator from '../../../StateManagement/Actions/actions';
 
 
 const Tablet = (props) => {
@@ -15,12 +13,14 @@ const Tablet = (props) => {
 }
 
 class PeopleContent extends React.Component {
+    
     getPeople = () => {
         const getRoutePath = this.props.match.params.username;
         const exactPeople = this.props.peoples.filter(people => people.username === getRoutePath)[0]
         return exactPeople
     }
     render() {
+        console.log('content',this.props)
         const people = this.getPeople()
         const data = [
             { name: 'Name', value: people.name },
@@ -64,14 +64,12 @@ class PeopleContent extends React.Component {
 const mapStateToProps = state => {
     console.log(state)
     return {
-        loading: state.loading,
-        error: state.error,
-        peoples: state.peoples
+        peoples:state.peoples
     }
 }
 const mapDispatchToState = dispatch => {
     return {
-        makeRequsetForGetPeoples:(val) => dispatch(actionCreator.makeRequsetForGetPeoples(val))
+       
   
     }
   }

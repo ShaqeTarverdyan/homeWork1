@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { connect } from 'react-redux';
-import * as actionCreator from './StateManagement/Actions/actions';
+
 
 import Header from './Components/Header/Header';
 import Home from './Components/Contents/Home';
@@ -13,9 +12,6 @@ import PeopleContent from './Components//Contents/People/PeopleContent';
 
 
 class App extends React.Component {
-  componentDidMount() {
-    return this.props.makeRequsetForGetPeoples(this.props.peoples)
-  }
   render() {
     return (
       <div >
@@ -36,17 +32,5 @@ class App extends React.Component {
   }
 
 }
-const mapStateToProps = state => {
-  return {
-      peoples:state.peoples,
-      people:state.people
 
-  }
-}
-const mapDispatchToState = dispatch => {
-  return {
-      makeRequsetForGetPeoples:(val) => dispatch(actionCreator.makeRequsetForGetPeoples(val))
-
-  }
-}
-export default connect(mapStateToProps,mapDispatchToState)(App);
+export default App;

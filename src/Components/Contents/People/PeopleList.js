@@ -1,22 +1,38 @@
 import React from 'react';
 import { Segment, Card } from 'semantic-ui-react';
-import { BrowserRouter as Router, Link } from "react-router-dom";
-import axios from 'axios';
+import { connect } from 'react-redux';
+import * as actionCreator from '../../../StateManagement/Actions/actions';
 
 import PeopleCard from './PeopleCard';
 
-class PeopleList extends React.Component {
-    render() {
+ const  PeopleList = (props) =>   {
         return (
             <Segment>
                 <Card.Group itemsPerRow='3'>
-                    <PeopleCard 
-                    />
+                    {
+                        props.peoples.map(people => {
+                            return (
+                                <PeopleCard people={ people } onDelete={ props.onDelete } key={ people.id }/>
+                            )
+                        })
+
+                    }
                 </Card.Group>
             </Segment>
         );
     }
 
-}
-
-export default PeopleList;
+    const mapStateToProps = state => {
+        console.log(state)
+        return {
+            peoples:state.peoples
+        }
+    }
+    const mapDispatchToState = dispatch => {
+        return {
+            onDelete:id => {
+                dispatch(actionCreator.deletePeople(id))
+            }
+        };
+    };
+export default connect(mapStateToProps, mapDispatchToState)(PeopleList);

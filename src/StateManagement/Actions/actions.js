@@ -1,73 +1,71 @@
+import { ADD_PEOPLE,DELETE_PEOPLE,GET_PEOPLE} from './types';
 import axios from 'axios';
-import store from '../Store/store';
+//
 
+export  const AddPeople = ({name, username, email, phone, website}) => {
+    return (dispatch) => {
+        return axios.post('https://jsonplaceholder.typicode.com/users', {
+            name, username, email, phone, website
+        })
+        .then(response => {
+            console.log('testadd',response)
+            dispatch(addPeopleSuccess(response.data))
+        })
+        .catch(error => {
+            throw(error);
+        });
+    };
+};
 
-export const loading = () => {
+export const addPeopleSuccess = (data) => {
     return {
-        type: 'LOADING'
+        type:ADD_PEOPLE,
+        payload: {
+            id:data.id,
+            name:data.name,
+            username:data.username,
+            email:data.email,
+            phone:data.phone,
+            website:data.website
+        }
+    }
+};
+
+export const deletePeopleSuccess = id => {
+    return {
+        type:DELETE_PEOPLE,
+        payload:{id}
     }
 }
-export const error = () => {
+
+export const  deletePeople = id => {
+    return (dispatch) => {
+        return axios.delete(`https://jsonplaceholder.typicode.com/user${id}`)
+        .then(response => {
+            dispatch(deletePeopleSuccess(response.data))
+        })
+        .catch(error => {
+            throw(error);
+        });
+    };
+};
+
+export const getPeople = (resp) => {
     return {
-        type: 'ERROR'
-    }
-}
-export const getPeoples = (data) => {
-    return {
-        type: 'GET_PEOPLE',
-        payload: data
+        type:GET_PEOPLE,
+        payload:resp
     }
 }
 
-export const makeRequsetForGetPeoples = () => {
-    return dispatch => {
-        dispatch(loading());
+export const getAllPeople = () => {
+    return (dispatch) => {
         axios.get('https://jsonplaceholder.typicode.com/users')
-            .then(resp => (
-                dispatch(getPeoples(resp.data))
-            ))
-    }
-}
-export const getInputValue = (event) => {
-
-    return {
-        type: 'GET_INPUT_VALUE',
-        payload: event
-    }
-}
-
-export const addPeopleToStore = (resp) => {
-    return {
-        type: 'ADD_PEOPLE_TO_STORE',
-        payload: resp
-    }
-}
-
-export const addNewPeopleToServer = () => {
-    const getStore = store.getState()
-    return dispatch => {
-        dispatch(loading());
-        axios.post('https://jsonplaceholder.typicode.com/users', getStore.people)
-            .then(resp => (
-                console.log('axios-post', resp),
-                dispatch(addPeopleToStore(resp.data))
-            ))
-    }
-}
-
-export const deleteItem = (resp) => {
-    return {
-        type: 'DELETE_ITEM',
-        payload: resp
-    }
-}
-
-export const deletePeopleFromServer = (id) => {
-    return dispatch => {
-        dispatch(loading());
-        axios.delete(`https://jsonplaceholder.typicode.com/users${id}`)
-            .then(resp =>
-                dispatch(deleteItem(resp))
-            )
-    }
-}
+        .then(response => {
+            console.log(response)
+            dispatch(getPeople(response.data))
+        })
+        .catch(error => {
+            throw(error);
+        });
+    };
+};
